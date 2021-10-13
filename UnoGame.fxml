@@ -30,12 +30,12 @@
             </Label>
             <ImageView fx:id="deckImage" fitHeight="150.0" fitWidth="200.0" layoutX="507.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/uno_faceCard.PNG" />
+                  <Image url="@images/Face_Card.PNG" />
                </image>
             </ImageView>
             <ImageView fx:id="playedCardImage" fitHeight="150.0" fitWidth="200.0" layoutX="626.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/uno_r3.PNG" />
+                  <Image url="@images/Red_Three.PNG" />
                </image>
             </ImageView>
          </children>
