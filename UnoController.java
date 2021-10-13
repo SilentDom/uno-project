@@ -67,15 +67,13 @@ public class UnoController {
 	}
 
 	public void initialize() {
-		playerCardButton1.setGraphic(new ImageView("/images/uno_g0.png"));
-		playerCardButton2.setGraphic(new ImageView("/images/uno_r1.png"));
-		playerCardButton3.setGraphic(new ImageView("/images/uno_b2.png"));
-		playerCardButton4.setGraphic(new ImageView("/images/uno_y3.png"));
-		playerCardButton5.setGraphic(new ImageView("/images/uno_gReverse.png"));
-		playerCardButton6.setGraphic(new ImageView("/images/uno_rSkip.png"));
-		playerCardButton7.setGraphic(new ImageView("/images/uno_bDrawTwo.png"));
-		playerCardButton8.setGraphic(new ImageView("/images/uno_wildDrawFour.png"));
-		playerCardButton9.setGraphic(new ImageView("/images/uno_g1.png"));
+		playerCardButton1.setGraphic(new ImageView("/images/Green_Zero.png"));
+		playerCardButton2.setGraphic(new ImageView("/images/Red_One.png"));
+		playerCardButton3.setGraphic(new ImageView("/images/Blue_Two.png"));
+		playerCardButton4.setGraphic(new ImageView("/images/Yellow_Three.png"));
+		playerCardButton5.setGraphic(new ImageView("/images/Green_Reverse.png"));
+		playerCardButton6.setGraphic(new ImageView("/images/Red_Skip.png"));
+		playerCardButton7.setGraphic(new ImageView("/images/Blue_DrawTwo.png"));
 	}
 
 }
