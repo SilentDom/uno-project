@@ -1,16 +1,15 @@
 
 public class Player {
 	private String playerName;
-	private String gameDirection = "Clockwise";
+	private boolean gameDirection;
 	private int roundNumber = 1;
 	private int numberOfPlayers;
 	private int numberOfCards;
 	private String[] playerList = new String[numberOfPlayers];
 	private String[] playerCards = new String[numberOfCards];
 	
-	public Player (String[] playerList, String[] playerCards) {
+	public Player (String[] playerList) {
 		this.playerList = playerList;
-		this.playerCards = playerCards;
 	} 
 	
 	public String getPlayerName() {
@@ -21,11 +20,11 @@ public class Player {
 		this.playerName = name; 
 	}
 	
-	public String getGameDirection() {
+	public boolean getGameDirection() {
 		return gameDirection;
 	}
 	
-	public void setGameDirection(String direction) {
+	public void setGameDirection(boolean direction) {
 		this.gameDirection = direction;
 	}
 	

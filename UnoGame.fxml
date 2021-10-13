@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
@@ -27,12 +28,16 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Button fx:id="deckButton" layoutX="525.0" layoutY="250.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playedCardButton" layoutX="650.0" layoutY="250.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0">
-               <padding>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </padding>
-            </Button>
+            <ImageView fx:id="deckImage" fitHeight="150.0" fitWidth="200.0" layoutX="507.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/uno_faceCard.PNG" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="playedCardImage" fitHeight="150.0" fitWidth="200.0" layoutX="626.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/uno_r3.PNG" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </center>
