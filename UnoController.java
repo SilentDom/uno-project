@@ -9,8 +9,8 @@ import javafx.scene.image.*;
 
 public class UnoController {
 
-	Deck deck = new Deck();
-	Game game = new Game(null);
+//	Deck deck = new Deck();
+//	Game game = new Game(null);
 	
 	@FXML
 	private Button playerCardButton3;
@@ -53,17 +53,17 @@ public class UnoController {
 
 	@FXML
 	void drawCardButtonPressed(ActionEvent event) {
-		deck.drawCard();
+//		deck.drawCard();
 	}
 
 	@FXML
 	void callUnoButtonPressed(ActionEvent event) {
-		if (game.getPlayerCardAmount(game.getCurrentPlayer()) == 1) {
-			JLabel message = new JLabel(game.getCurrentPlayer()+ " declared UNO!");
-			message.setFont(new Font("Arial", Font.BOLD, 48));
-		} else {
-			throw new IllegalArgumentException("You cannot declare UNO with more than 1 card in your hand.");
-		}
+//		if (game.getPlayerCardAmount(game.getCurrentPlayer()) == 1) {
+//			JLabel message = new JLabel(game.getCurrentPlayer()+ " declared UNO!");
+//			message.setFont(new Font("Arial", Font.BOLD, 48));
+//		} else {
+//			throw new IllegalArgumentException("You cannot declare UNO with more than 1 card in your hand.");
+//		}
 	}
 
 	public void initialize() {
