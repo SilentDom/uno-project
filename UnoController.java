@@ -1,4 +1,5 @@
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
@@ -50,10 +51,14 @@ public class UnoController {
 
 	@FXML
 	private ImageView deckImage;
-
+	
+	Card[] cards = new Card[108];
+	Deck deck = new Deck(cards, 0);
 	@FXML
 	void drawCardButtonPressed(ActionEvent event) {
-//		deck.drawCard();
+		deck.shuffleDeck();
+		Card c = deck.drawCard();
+		playerCardButton1.setGraphic( new ImageView(c.getImage(c.getColor(), c.getType())));
 	}
 
 	@FXML
@@ -67,13 +72,14 @@ public class UnoController {
 	}
 
 	public void initialize() {
-		playerCardButton1.setGraphic(new ImageView("/images/Green_Zero.png"));
+		deck.createDeck();
+		/*playerCardButton1.setGraphic(new ImageView("/images/Green_Zero.png"));
 		playerCardButton2.setGraphic(new ImageView("/images/Red_One.png"));
 		playerCardButton3.setGraphic(new ImageView("/images/Blue_Two.png"));
 		playerCardButton4.setGraphic(new ImageView("/images/Yellow_Three.png"));
 		playerCardButton5.setGraphic(new ImageView("/images/Green_Reverse.png"));
 		playerCardButton6.setGraphic(new ImageView("/images/Red_Skip.png"));
-		playerCardButton7.setGraphic(new ImageView("/images/Blue_DrawTwo.png"));
+		playerCardButton7.setGraphic(new ImageView("/images/Blue_DrawTwo.png"));*/
 	}
 
 }
