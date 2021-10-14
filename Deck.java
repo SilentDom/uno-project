@@ -7,8 +7,9 @@ public class Deck {
 	private Card[] cards;
 	private int deck;
 	
-	public Deck() {
-		cards = new Card[108];
+	public Deck(Card[] cards, int deck) {
+		this.cards = cards;
+		this.deck = deck;
 	}
 	
 	public void createDeck() {
@@ -21,7 +22,7 @@ public class Deck {
 			// Creates the 10 number cards of each color.
 			cards[deck++] = new Card(color, Card.Type.getType(0));
 			
-			for (int j = i; j < 10; j++) {
+			for (int j = i; j < 9; j++) {
 				cards[deck++] = new Card(color, Card.Type.getType(j));
 				cards[deck++] = new Card(color, Card.Type.getType(j));
 			}
@@ -36,7 +37,7 @@ public class Deck {
 				cards[deck++] = new Card(color, e);
 				cards[deck++] = new Card(color, e);
 			}
-			
+		}
 			// Creates the 4 Wild & 4 Wild Draw 4 cards in the deck.
 			Card.Type[] wild = new Card.Type[] {
 					Card.Type.Wild, Card.Type.WildDrawFour
@@ -46,7 +47,6 @@ public class Deck {
 					cards[deck++] = new Card(Card.Color.Wild, e);
 				}
 			}
-		}
 	}
 	
 	// In case the deck runs out of cards, this method changes the discard pile to the new deck. 
