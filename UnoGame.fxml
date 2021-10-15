@@ -14,16 +14,16 @@
          <children>
             <Button fx:id="callUnoButton" layoutX="14.0" layoutY="503.0" mnemonicParsing="false" onAction="#callUnoButtonPressed" prefHeight="46.0" prefWidth="86.0" text="Call UNO" />
             <Button fx:id="drawCardButton" layoutX="414.0" layoutY="302.0" mnemonicParsing="false" onAction="#drawCardButtonPressed" prefHeight="46.0" prefWidth="86.0" text="Draw Card" />
-            <Button fx:id="playerCardButton1" layoutX="14.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton2" layoutX="136.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton3" layoutX="259.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton4" layoutX="378.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton5" layoutX="500.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton6" layoutX="625.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton7" layoutX="750.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton8" layoutX="875.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Button fx:id="playerCardButton9" layoutX="1000.0" layoutY="556.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" />
-            <Label layoutX="850.0" layoutY="499.0" prefHeight="50.0" prefWidth="300.0" text="Player 1's Cards" underline="true">
+            <Button fx:id="playerCardButton1" layoutX="14.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard1ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton2" layoutX="136.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard2ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton3" layoutX="259.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard3ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton4" layoutX="378.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard4ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton5" layoutX="500.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard5ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton6" layoutX="625.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard6ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton7" layoutX="750.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard7ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton8" layoutX="875.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard8ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Button fx:id="playerCardButton9" layoutX="1000.0" layoutY="556.0" mnemonicParsing="false" onAction="#playerCard9ButtonPressed" prefHeight="150.0" prefWidth="100.0" />
+            <Label fx:id="player1Label" layoutX="850.0" layoutY="499.0" prefHeight="50.0" prefWidth="300.0" text="Player 1's Cards" underline="true">
                <font>
                   <Font size="36.0" />
                </font>
@@ -34,6 +34,7 @@
                </image>
             </ImageView>
             <ImageView fx:id="playedCardImage" fitHeight="150.0" fitWidth="200.0" layoutX="626.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="endTurnButton" layoutX="136.0" layoutY="503.0" mnemonicParsing="false" onAction="#endTurnButtonPressed" prefHeight="46.0" prefWidth="86.0" text="End Turn" />
          </children>
       </Pane>
    </center>

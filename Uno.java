@@ -1,5 +1,3 @@
-// Fig. 12.19: TipCalculator.java
-// Main application class that loads and displays the Tip Calculator's GUI.
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +17,7 @@ public class Uno extends Application {
    }
 
    public static void main(String[] args) {
-      // create a TipCalculator object and call its start method
+      // create a UnoGame object and call its start method
       launch(args); 
    }
 }

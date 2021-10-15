@@ -3,16 +3,17 @@ import java.util.Random;
 
 public class Deck {
 	private Card[] cards;
-	private int deck;
+	private int deckSize;
+	private int deckCounter;
 
 	public Deck(int deck) {
-		this.deck = deck;
+		this.deckSize = deck;
 		cards = new Card[deck];
 	}
 
 	public void createDeck() {
 		Card.Color[] colors = Card.Color.values();
-		int deckCounter = 0;
+		deckCounter = 0;
 
 		// Create our single use zero cards
 		for (int i = 0; i < colors.length - 1; i++) {
@@ -40,12 +41,12 @@ public class Deck {
 	// In case the deck runs out of cards, this method changes the discard pile to the new deck. 
 	public void replaceDeck(ArrayList<Card> cards) {
 		this.cards = cards.toArray(new Card[(cards.size())]);
-		this.deck = this.cards.length;
+		this.deckSize = this.cards.length;
 	}
 
 	// Checks if the deck is empty. 
 	public boolean isDeckEmpty() {
-		return deck == 0;
+		return deckCounter == 0;
 	}
 
 	// Shuffles the deck by generating random values and places the card at that spot in the array. 
@@ -66,12 +67,12 @@ public class Deck {
 		if (isDeckEmpty()) {
 			throw new IllegalArgumentException("Cannot draw a card, the deck is empty.");
 		}
-		Card newCard = cards[--deck];
+		Card newCard = cards[--deckCounter];
 		return newCard;
 	}
 
 	public Card[] drawMultipleCards(int x) {
-		if (x > deck) {
+		if (x > deckSize) {
 			throw new IllegalArgumentException("Cannot draw that many cards, not enough cards are in the deck.");
 		}
 		else if (x < 0) {
@@ -81,7 +82,7 @@ public class Deck {
 		Card[] draw = new Card[x];
 
 		for (int i = 0; i < 0; i ++) {
-			draw[i] = cards[--deck];
+			draw[i] = cards[--deckCounter];
 		}
 		return draw;
 	}
