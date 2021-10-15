@@ -70,7 +70,7 @@ public class UnoController {
 	
     @FXML
     void playerCard1ButtonPressed(ActionEvent event) {
-    	
+
     }
 
     @FXML
@@ -136,23 +136,34 @@ public class UnoController {
             cardButtons.get(i).setGraphic(new ImageView(currentPlayerCard.getImage(currentPlayerCard.getColor(), currentPlayerCard.getType())));
         }
     }
-
-	public void initialize() {
-		deck.createDeck();
-		deck.shuffleDeck();
-		game.startGame(game);	
-		buttonList();
-		
-		Card c = deck.drawCard();
-		playedCardImage = new ImageView(c.getImage(c.getColor(), c.getType()));
-		
+    
+    public void dealCards() {
         for (int i = 0; i < startingHandSize; i++) {
             for (int j = 0; j < players ; j++) {
                 Card c1 = deck.drawCard();
                 game.getPlayerHand().add(c1);
             }
         }
+    }
+    
+    public void playFirstCard() {
+		Card c = deck.drawCard();
+		while (c.getType() == Card.Type.Wild || c.getType() == Card.Type.WildDrawFour || c.getType() == Card.Type.DrawTwo || c.getColor() == Card.Color.Wild
+				|| c.getType() == Card.Type.Skip || c.getType() == Card.Type.Reverse) {
+			c = deck.drawCard();
+		}
+		game.getDiscardPile().add(c);
+		Image firstCard = new Image(c.getImage(c.getColor(), c.getType()));
+		playedCardImage.setImage(firstCard);
+    }
+
+	public void initialize() {
+		deck.createDeck();
+		deck.shuffleDeck();
+		game.startGame(game);	
+		playFirstCard();
+		buttonList();
+		dealCards();
         drawPlayerHand();
-        System.out.println(game.getPlayerHand());
 	}
 }

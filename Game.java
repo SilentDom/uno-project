@@ -55,6 +55,10 @@ public class Game {
 	public String getCurrentPlayer() {
 		return player;
 	}
+	
+	public ArrayList<Card> getDiscardPile() {
+		return discardPile;
+	}
 
 	public boolean isGameOver() {
 		if (hasEmptyHand()) {
@@ -78,7 +82,7 @@ public class Game {
 		checkColor = color; 
 	}
 
-	public void cardPlayed(String playerName, Card card, Card.Color color) {
+	public void cardPlayed(Card card, Card.Color color) {
 		if (!checkCard(card)) {
 			if (card.getColor() == Card.Color.Wild) {
 				checkColor = card.getColor();
