@@ -1,17 +1,18 @@
-import java.awt.Font;
 import java.util.ArrayList;
-
-import javax.swing.JLabel;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.*;
 
 public class UnoController {
-
-//	Deck deck = new Deck();
-//	Game game = new Game(null);
+	
+	Card[] cards = new Card[108];
+	Deck deck = new Deck(108);
+	Game game = new Game();
+	ArrayList<Button> cardButtons = new ArrayList<Button>();
+	int players = 1;
+	int startingHandSize = 7;
 	
 	@FXML
 	private Button playerCardButton3;
@@ -29,9 +30,6 @@ public class UnoController {
 	private Button playerCardButton7;
 
 	@FXML
-	private Button callUnoButton;
-
-	@FXML
 	private Button playerCardButton8;
 
 	@FXML
@@ -42,9 +40,9 @@ public class UnoController {
 
 	@FXML
 	private Button playerCardButton2;
-
+	
 	@FXML
-	private Button drawCardButton;
+	private Button callUnoButton;
 
 	@FXML
 	private ImageView playedCardImage;
@@ -52,34 +50,109 @@ public class UnoController {
 	@FXML
 	private ImageView deckImage;
 	
-	Card[] cards = new Card[108];
-	Deck deck = new Deck(cards, 0);
+    @FXML
+    private Label player1Label;
+	
 	@FXML
 	void drawCardButtonPressed(ActionEvent event) {
-		deck.shuffleDeck();
+		if (game.getPlayerHand().size() >= 9) {
+			
+		}
 		Card c = deck.drawCard();
-		playerCardButton1.setGraphic( new ImageView(c.getImage(c.getColor(), c.getType())));
+		game.getPlayerHand().add(c);
+		drawPlayerHand();
 	}
 
 	@FXML
 	void callUnoButtonPressed(ActionEvent event) {
-//		if (game.getPlayerCardAmount(game.getCurrentPlayer()) == 1) {
-//			JLabel message = new JLabel(game.getCurrentPlayer()+ " declared UNO!");
-//			message.setFont(new Font("Arial", Font.BOLD, 48));
-//		} else {
-//			throw new IllegalArgumentException("You cannot declare UNO with more than 1 card in your hand.");
-//		}
+		
 	}
+	
+    @FXML
+    void playerCard1ButtonPressed(ActionEvent event) {
+    	
+    }
+
+    @FXML
+    void playerCard2ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard3ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard4ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard5ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard6ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard7ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard8ButtonPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    void playerCard9ButtonPressed(ActionEvent event) {
+
+    }
+    
+    public void buttonList() {
+    	cardButtons.add(playerCardButton1);
+    	cardButtons.add(playerCardButton2);
+    	cardButtons.add(playerCardButton3);
+    	cardButtons.add(playerCardButton4);
+    	cardButtons.add(playerCardButton5);
+    	cardButtons.add(playerCardButton6);
+    	cardButtons.add(playerCardButton7);
+    	cardButtons.add(playerCardButton8);
+    	cardButtons.add(playerCardButton9);
+    }
+    
+    public void setPlayerName() {
+    	String currentPlayer = game.getCurrentPlayer();
+    	player1Label.setText(currentPlayer + "'s cards");
+    }
+    
+    public void drawPlayerHand() {
+        for (int i = 0; i < game.getPlayerHand().size(); i++) {
+            Card currentPlayerCard = game.getPlayerCard(i);
+            cardButtons.get(i).setGraphic(new ImageView(currentPlayerCard.getImage(currentPlayerCard.getColor(), currentPlayerCard.getType())));
+        }
+    }
 
 	public void initialize() {
 		deck.createDeck();
-		/*playerCardButton1.setGraphic(new ImageView("/images/Green_Zero.png"));
-		playerCardButton2.setGraphic(new ImageView("/images/Red_One.png"));
-		playerCardButton3.setGraphic(new ImageView("/images/Blue_Two.png"));
-		playerCardButton4.setGraphic(new ImageView("/images/Yellow_Three.png"));
-		playerCardButton5.setGraphic(new ImageView("/images/Green_Reverse.png"));
-		playerCardButton6.setGraphic(new ImageView("/images/Red_Skip.png"));
-		playerCardButton7.setGraphic(new ImageView("/images/Blue_DrawTwo.png"));*/
+		deck.shuffleDeck();
+		game.startGame(game);	
+		buttonList();
+		
+		Card c = deck.drawCard();
+		playedCardImage = new ImageView(c.getImage(c.getColor(), c.getType()));
+		
+        for (int i = 0; i < startingHandSize; i++) {
+            for (int j = 0; j < players ; j++) {
+                Card c1 = deck.drawCard();
+                game.getPlayerHand().add(c1);
+            }
+        }
+        drawPlayerHand();
+        System.out.println(game.getPlayerHand());
 	}
-
 }

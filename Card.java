@@ -1,4 +1,3 @@
-
 public class Card {
 
 	public enum Color {
@@ -39,7 +38,6 @@ public class Card {
 
 	private Color color;
 	private Type type;
-	private String image;
 	public Card(Color color, Type type) {
 		this.color = color;
 		this.type = type;
@@ -146,7 +144,6 @@ public class Card {
 	}
 
 	public void setImage(String image) {
-		this.image = image;
 	}
 
 	@Override

@@ -1,35 +1,28 @@
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javafx.scene.image.ImageView;
 
 public class Game {
-	private int currentPlayer;
-	private String[] playerNames;
-	private ArrayList<ArrayList<Card>> playerCards;
-	private Deck deck;
+	private String player;
+	private ArrayList<Card> playerCards;
 	private ArrayList<Card> discardPile;
+	private Deck deck;
+	private Card[] cards;
 	private Card.Color checkColor;
 	private Card.Type checkType;
 	boolean gameDirection; 
 
-	public Game(String[] players) {
-		deck = new Deck();
-		deck.shuffleDeck();
+	public Game() {
+		deck = new Deck(108);
 		discardPile = new ArrayList<Card>();
 		gameDirection = false;
-		playerNames = players;
-		currentPlayer = 0;
-		playerCards = new ArrayList<ArrayList<Card>>();
-
-		for (int i = 0; i < players.length; i++) {
-			ArrayList<Card> playerHand = new ArrayList<Card>(Arrays.asList(deck.drawCard()));
-			playerCards.add(playerHand);
-		}
+		playerCards = new ArrayList<Card>();
 	}
+
 	public void startGame(Game game) {
+		deck.createDeck();
 		Card card = deck.drawCard();
 		checkColor = card.getColor();
 		checkType = card.getType();
@@ -40,33 +33,15 @@ public class Game {
 		else if (card.getType() == Card.Type.WildDrawFour || card.getType() == Card.Type.DrawTwo) {
 			startGame(game);
 		}
-		else if (card.getType() == Card.Type.Skip) {
-			JLabel message = new JLabel(playerNames[currentPlayer] + "'s turn was skipped.");
-			message.setFont(new Font("Arial", Font.BOLD, 48));
-			JOptionPane.showMessageDialog(null, message);
-
-			if (gameDirection == false) {
-				currentPlayer = (currentPlayer + 1) % playerNames.length;
-			}
-			else if (gameDirection == true) {
-				currentPlayer = (currentPlayer - 1) % playerNames.length;
-				if (currentPlayer < 0) {
-					currentPlayer = playerNames.length - 1;
-				}
-			}
-		}
-		else if (card.getType() == Card.Type.Reverse) {
-			JLabel message = new JLabel(playerNames[currentPlayer] + " reversed the game direction.");
-			message.setFont(new Font("Arial", Font.BOLD, 48));
-			JOptionPane.showMessageDialog(null, message);
-			if (gameDirection == true) {
-				gameDirection = false;
-			} else {
-				gameDirection = true; 
-			}
-			currentPlayer = playerNames.length - 1;
-		}
 		discardPile.add(card);
+	}
+
+	public ArrayList<Card> getPlayerHand() {
+		return playerCards;
+	}
+
+	public Card getPlayerCard(int hand) {
+		return playerCards.get(hand);
 	}
 
 	public Card getTopCard() {
@@ -77,79 +52,52 @@ public class Game {
 		return new ImageView(checkColor + "_" + checkType + ".png");
 	}
 
+	public String getCurrentPlayer() {
+		return player;
+	}
+
 	public boolean isGameOver() {
-		for (String players : this.playerNames) {
-			if (hasEmptyHand(players)) {
-				return true;
-			}
+		if (hasEmptyHand()) {
+			return true;
 		}
 		return false;
 	}
 
-	public String getCurrentPlayer() {
-		return this.playerNames[this.currentPlayer];
-	}
-
-	public String getPreviousPlayer (int i) {
-		int index = this.currentPlayer - i;
-		if (index < 0) {
-			index = playerNames.length - 1;
+	public boolean hasEmptyHand() {
+		if (playerCards.size() == 0) {
+			return true;
 		}
-		return this.playerNames[index];
+		return false;
 	}
 
-	public String[] getPlayers() {
-		return playerNames;
-	}
-
-	public ArrayList<Card> getPlayerHand(String playerName) {
-		int i = Arrays.asList(playerNames).indexOf(playerName);
-		return playerCards.get(i);
-	}
-
-	public int getPlayerCardAmount(String playerName) {
-		return getPlayerHand(playerName).size();
-	}
-
-	public Card getPlayerCard (String playerName, int card) {
-		ArrayList<Card> hand = getPlayerHand(playerName);
-		return hand.get(card);
-	}
-
-	public boolean hasEmptyHand(String playerName) {
-		return getPlayerHand(playerName).isEmpty();
-	}
-	
 	public boolean checkCard(Card card) {
 		return card.getColor() == checkColor | card.getType() == checkType;
 	}
-	
-	public void checkPlayerTurn(String playerName) {
-		if (this.playerNames[this.currentPlayer] != playerName) {
-			throw new IllegalArgumentException("It is not " + playerName + "'s turn.");
-		}
-	}
-	
-	public void submitDraw(String playerName) {
-		checkPlayerTurn(playerName);
-		if (deck.isDeckEmpty()) {
-			deck.replaceDeck(discardPile);
-			deck.shuffleDeck();
-		}
-		getPlayerHand(playerName).add(deck.drawCard());
-		if (gameDirection == false) {
-			currentPlayer = (currentPlayer + 1) % playerNames.length;
-		}
-		else if (gameDirection == true) {
-			currentPlayer = (currentPlayer - 1) % playerNames.length;
-			if (currentPlayer < 0) {
-				currentPlayer = playerNames.length - 1;
-			}
-		}
-	}
-	
+
 	public void setCardColor(Card.Color color) {
 		checkColor = color; 
 	}
-}
 
+	public void cardPlayed(String playerName, Card card, Card.Color color) {
+		if (!checkCard(card)) {
+			if (card.getColor() == Card.Color.Wild) {
+				checkColor = card.getColor();
+				checkType = card.getType();
+			}
+			if (card.getColor() != checkColor) {
+				throw new IllegalArgumentException("Color chosen does not match the current color: " + checkColor);
+			}
+		}
+		playerCards.remove(card);
+
+		if (hasEmptyHand() == true) {
+			JLabel msg = new JLabel("You won the game!");
+			msg.setFont(new Font("Arial", Font.BOLD, 48));
+			JOptionPane.showMessageDialog(null, msg);
+			System.exit(0);
+		}
+		checkColor = card.getColor();
+		checkType = card.getType();
+		discardPile.add(card);
+	}
+}
