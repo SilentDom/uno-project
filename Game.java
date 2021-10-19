@@ -136,13 +136,29 @@ public class Game {
 	public void addToDiscardPile(Card card) {
 		getDiscardPile().add(card);
 		lastDiscard = new Image(card.getImage(card.getColor(), card.getType()));
+//		// debug statements
+//		System.out.println("Added to discard pile");
+//		System.out.println(getDiscardPile().get(getDiscardPile().size()-1));
 	}
 
+	// 
 	public void playCard(int cardNumber) {
 		try {
 			Card currentPlayerCard = getPlayerCard(cardNumber);
-			getPlayerHand().remove(cardNumber); 
-			addToDiscardPile(currentPlayerCard);
+			Card discardCard = getDiscardPile().get(getDiscardPile().size()-1);
+			
+			if (currentPlayerCard.getType() == discardCard.getType()
+					|| currentPlayerCard.getColor() == discardCard.getColor()
+					|| currentPlayerCard.getType() == Card.Type.Wild
+					|| currentPlayerCard.getType() == Card.Type.WildDrawFour
+					|| discardCard.getType() == Card.Type.Wild	// temporary until wild color choosing
+					|| discardCard.getType() == Card.Type.WildDrawFour) {
+				
+				getPlayerHand().remove(cardNumber); 
+				addToDiscardPile(currentPlayerCard);
+			}
+			
+
 		} catch (Exception e) {
 			System.out.println("We caught exception: " + e.toString());
 		}
