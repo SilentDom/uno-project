@@ -51,12 +51,6 @@ public class Card {
 		return type;
 	}
 
-	/**
-	 * 
-	 * @param color
-	 * @param type
-	 * @return The image url for each unique card
-	 */
 	public String getImage(Color color, Type type) {
 		if (color == Color.Blue) {
 			switch(type) {
@@ -149,6 +143,8 @@ public class Card {
 		this.type = type;
 	}
 
+	public void setImage(String image) {
+	}
 
 	@Override
 	public String toString() {
