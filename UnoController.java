@@ -143,6 +143,8 @@ public class UnoController {
 		game.playCard(0, cardNum); // TODO: fix hardcode
 		drawPlayerHand();
 		updateDiscardDraw();
+		game.playCard(1, cardNum);
+		updateDiscardDraw();
 	}
 
 	public void updateDiscardDraw() {
@@ -150,7 +152,7 @@ public class UnoController {
 	}
 
     public void drawPlayerHand() {
-        Player thisPlayer = game.getActingPlayer(0);
+        Player thisPlayer = game.getActingPlayer(0); // TODO: remove hardcode
         int originalHandSize = thisPlayer.getPlayerHand().size();
         List<Card> playerCards = thisPlayer.getPlayerHand();
         for (int i = 0; i < originalHandSize + 1; i++) {

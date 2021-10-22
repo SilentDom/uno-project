@@ -15,7 +15,7 @@ public class Game {
 	private Image lastDiscard;
 
 	public Game() {
-		for (int i = 0; i < 4; i ++) {
+		for (int i = 0; i < 2; i ++) {
 			players.add(new Player("Player " + i));
 		}
 		gameDirection = false;
@@ -97,6 +97,10 @@ public class Game {
 
 	public Player getActingPlayer(int playerIndex) {
 		return players.get(playerIndex);
+	}
+	
+	public Deck getDeck() {
+		return deck;
 	}
 
 	public void playCard(int playerNum, int cardNumber) {
