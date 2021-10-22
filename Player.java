@@ -1,74 +1,46 @@
+import java.util.List;
 
 public class Player {
 	private String playerName;
-	private boolean gameDirection;
-	private int roundNumber = 1;
-	private int numberOfPlayers;
-	private int numberOfCards;
-	private String[] playerList = new String[numberOfPlayers];
-	private String[] playerCards = new String[numberOfCards];
+	private List<Player> players;
+	private List<Card> playerHand;
 	
-	public Player (String[] playerList) {
-		this.playerList = playerList;
+	// Constructor for the player(s):
+	public Player (String playerName) {
+		this.playerName = playerName;
 	} 
 	
+	// Getter for the player's name:
 	public String getPlayerName() {
 		return playerName;
 	}
 	
+	// Setter for the player's name:
 	public void setPlayerName(String name) {
 		this.playerName = name; 
 	}
-	
-	public boolean getGameDirection() {
-		return gameDirection;
+
+	// Getter for the players in the game: 
+	public List<Player> getPlayers() {
+		return players;
 	}
 	
-	public void setGameDirection(boolean direction) {
-		this.gameDirection = direction;
+	// Getter for the player's hand: 
+	public List<Card> getPlayerHand() {
+		return playerHand; 
 	}
 	
-	public int getRoundNumber() {
-		return roundNumber;
+	// Sets the player's hand:
+	public void setPlayerHand(List<Card> hand) {
+		this.playerHand = hand;
 	}
 	
-	public void setRoundNumber(int round) {
-		this.roundNumber++; 
+	public Card getPlayerCard(int hand) {
+		return this.playerHand.get(hand);
 	}
 	
-	public int getNumberOfPlayers() {
-		return numberOfPlayers;
-	}
-	
-	public void setNumberOfPlayers(int players) {
-		this.numberOfPlayers = players;
-	}
-	
-	public String[] getPlayerList() {
-		return playerList;
-	}
-	
-	public void setPlayerList(String[] players) {
-		for (int i = 0; i < playerList.length; i++) {
-			playerList[i] = playerName;
-		}
-	}
-	
-	public String[] getPlayerCards() {
-		return playerCards; 
-	}
-	
-	public void printPlayerList() {
-		for (String ele : playerList) {
-			System.out.printf("%d ", ele);
-		}
-		System.out.println();
-	}
-	
-	public void printCardList() {
-		for (String ele : playerCards) {
-			System.out.printf("%d ", ele);
-		}
-		System.out.println();
+	@Override
+	public String toString() {
+		return this.playerName + " " + this.playerHand;
 	}
 }

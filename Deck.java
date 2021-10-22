@@ -1,89 +1,54 @@
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 public class Deck {
-	private Card[] cards;
-	private int deckSize;
-	private int deckCounter;
+	private List<Card> cards = new ArrayList<Card>();
 
-	public Deck(int deck) {
-		this.deckSize = deck;
-		cards = new Card[deck];
-	}
-
-	public void createDeck() {
-		Card.Color[] colors = Card.Color.values();
-		deckCounter = 0;
+	public Deck() {
+		CardColor[] colors = CardColor.values();
+		CardType[] types = CardType.values();
 
 		// Create our single use zero cards
 		for (int i = 0; i < colors.length - 1; i++) {
-			Card.Color color = colors[i];
-			cards[deckCounter++] = new Card(color, Card.Type.getType(0));
+			CardColor color = colors[i];
+			CardType type = types[0];
+			cards.add(new Card(color, type));
 		}
 
 		// Create two of each colored number and function card
 		for (int i = 0; i < colors.length - 1; i++) {
-			Card.Color color = colors[i];
+			CardColor color = colors[i];
 			for (int j = 1; j < 13; j++) {
-				cards[deckCounter++] = new Card(color, Card.Type.getType(j));
-				cards[deckCounter++] = new Card(color, Card.Type.getType(j));
+				CardType type = types[j];
+				cards.add(new Card(color, type));
+				cards.add(new Card(color, type));
 			}
 		}
 
 		// Create our wild cards
 		for (int i = 13; i < 15; i++) {
+			CardType type = types[i];
 			for (int j = 0; j < 4; j++) {
-				cards[deckCounter++] = new Card(Card.Color.Wild, Card.Type.getType(i));
+				cards.add(new Card(CardColor.Wild, type));
 			}
 		}
 	}
 
-	// In case the deck runs out of cards, this method changes the discard pile to the new deck. 
-	public void replaceDeck(ArrayList<Card> cards) {
-		this.cards = cards.toArray(new Card[(cards.size())]);
-		this.deckSize = this.cards.length;
-	}
-
-	// Checks if the deck is empty. 
-	public boolean isDeckEmpty() {
-		return deckCounter == 0;
-	}
-
-	// Shuffles the deck by generating random values and places the card at that spot in the array. 
+	// Shuffles the deck by utilizing the Collections Java utility:
 	public void shuffleDeck() {
-		int newDeck = cards.length;
-		Random rand = new Random();
-
-		for (int i = 0; i < cards.length; i++) {
-			int x = i + rand.nextInt(newDeck - i);
-			Card randCard = cards[x];
-			cards[x] = cards[i];
-			cards[i] = randCard;
-		}
+		Collections.shuffle(cards);
+	}
+	
+	public List<Card> getDeck() {
+		return cards;
 	}
 
-	//TODO fix drawCard method
-	public Card drawCard() {
-		if (isDeckEmpty()) {
-			throw new IllegalArgumentException("Cannot draw a card, the deck is empty.");
+	// Checks if the deck is empty: 
+	public boolean isDeckEmpty() {
+		if (cards.size() == 0) {
+			return true;
 		}
-		Card newCard = cards[--deckCounter];
-		return newCard;
-	}
-
-	public Card[] drawMultipleCards(int x) {
-		if (x > deckSize) {
-			throw new IllegalArgumentException("Cannot draw that many cards, not enough cards are in the deck.");
-		}
-		else if (x < 0) {
-			throw new IllegalArgumentException("Cannot draw a negative amount of cards.");
-		}
-
-		Card[] draw = new Card[x];
-
-		for (int i = 0; i < 0; i ++) {
-			draw[i] = cards[--deckCounter];
-		}
-		return draw;
+		return false;
 	}
 }
