@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.Collections;
@@ -15,7 +17,7 @@ public class Game {
 	private Image lastDiscard;
 
 	public Game() {
-		for (int i = 0; i < 2; i ++) {
+		for (int i = 0; i < 1; i ++) {
 			players.add(new Player("Player " + i));
 		}
 		gameDirection = false;
@@ -64,14 +66,8 @@ public class Game {
 	}
 
 	public boolean isGameOver() {
-		if (hasEmptyHand()) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean hasEmptyHand() {
-		if (playerCards.size() == 0) {
+		Player thisPlayer = getActingPlayer(0);
+		if (thisPlayer.getPlayerHand().size() == 0) {
 			return true;
 		}
 		return false;
@@ -85,8 +81,8 @@ public class Game {
 		checkColor = color; 
 	}
 
-	public void givePlayerCard(Player player, Card card) {
-		card = deck.getDeck().remove(0);
+	public void givePlayerCard(Player player) {
+		Card card = deck.getDeck().remove(0);
 		player.getPlayerHand().add(card);
 	}
 
@@ -116,11 +112,45 @@ public class Game {
 					|| discardCard.getCardType() == CardType.WildDrawFour) {
 
 				Player player = getActingPlayer(0);
-				player.getPlayerHand().remove(cardNumber); 
+				player.getPlayerHand().remove(cardNumber);
 				addToDiscardPile(currentCard);
 			}
 		} catch (Exception e) {
 			System.out.println("We caught an exception: " + e.toString());
 		}
 	}
+	
+//	public void playComputerCard (int cardNum) {
+//		Card currentPlayerCard = getPlayerCard(cardNum);
+//		for(int i = 0; i < getPlayerHand().size(); i++){
+//			if (isPlayable(currentPlayerCard)){
+//				getPlayerHand().remove(cardNum); 
+//			}
+//		}
+//		Card newCard = deck.getDeck().remove(0);
+//		while (!isPlayable(newCard)) {
+//			newCard = deck.getDeck().remove(0);
+//			if (isPlayable(newCard)) {
+//				getPlayerHand().remove(newCard);
+//				getGame(game).getDiscardPile().add(newCard);
+//			} else { 
+//				getPlayerHand().add(newCard);
+//			}
+//		}
+//	}
+//	
+//	public boolean isPlayable (Card currentPlayerCard) {
+//		Card discardCard = getDiscardPile().get(getDiscardPile().size()-1);
+//		if (currentPlayerCard.getCardType() == discardCard.getCardType()
+//				|| currentPlayerCard.getCardColor() == discardCard.getCardColor()
+//				|| currentPlayerCard.getCardType() == CardType.Wild
+//				|| currentPlayerCard.getCardType() == CardType.WildDrawFour
+//				|| discardCard.getCardType() == CardType.Wild	// temporary until wild color choosing
+//				|| discardCard.getCardType() == CardType.WildDrawFour) {
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
 }

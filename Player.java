@@ -39,8 +39,8 @@ public class Player {
 		this.playerHand = hand;
 	}
 	
-	public Card getPlayerCard(int hand) {
-		return this.playerHand.get(hand);
+	public Card getPlayerCard(int index) {
+		return playerHand.get(index);
 	}
 	
 	@Override

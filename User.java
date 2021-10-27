@@ -8,9 +8,9 @@ public class User extends Player{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Card userCard(int cardNumber) {
+	public Card userCard(int userCard) {
 		try {
-			Card currentPlayerCard = getPlayerCard(cardNumber);
+			Card currentPlayerCard = getPlayerCard(userCard);
 			Card discardCard = getGame(game).getDiscardPile().get(getGame(game).getDiscardPile().size()-1);
 
 			if (currentPlayerCard.getCardType() == discardCard.getCardType()
@@ -20,7 +20,7 @@ public class User extends Player{
 					|| discardCard.getCardType() == CardType.Wild	// temporary until wild color choosing
 					|| discardCard.getCardType() == CardType.WildDrawFour) {
 
-				getPlayerHand().remove(cardNumber); 
+				getPlayerHand().remove(userCard);
 				return currentPlayerCard;
 			}
 			else return null;
@@ -32,8 +32,8 @@ public class User extends Player{
 		}
 	}
 
-	public Card playCard(int cardNum) {
-		return userCard(cardNum);
+	public Card playCard(int playCard) {
+		return userCard(playCard);
 	}
 
 

@@ -1,7 +1,12 @@
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Card {
 
 	private CardColor color;
 	private CardType type;
+
 	public Card(CardColor color, CardType type) {
 		this.color = color;
 		this.type = type;

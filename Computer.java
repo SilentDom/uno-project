@@ -8,11 +8,11 @@ public class Computer extends Player {
 
 	}
 
-	public void playComputerCard (int cardNum) {
-		Card currentPlayerCard = getPlayerCard(cardNum);
+	public void playComputerCard (int compCard) {
+		Card currentPlayerCard = getPlayerCard(compCard);
 		for(int i = 0; i < getPlayerHand().size(); i++){
 			if (isPlayable(currentPlayerCard)){
-				getPlayerHand().remove(cardNum); 
+				getPlayerHand().remove(compCard);
 			}
 		}
 		Card newCard = deck.getDeck().remove(0);
