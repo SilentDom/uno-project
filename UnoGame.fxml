@@ -25,8 +25,10 @@
                </image>
             </ImageView>
             <ImageView fx:id="playedCardImage" fitHeight="150.0" fitWidth="200.0" layoutX="626.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" />
-            <ListView fx:id="cardListView" layoutX="40.0" layoutY="521.0" onMouseClicked="#cardClicked" prefHeight="180.0" prefWidth="1200.0" />
+            <ListView fx:id="cardListView" layoutX="40.0" layoutY="521.0" onMouseClicked="#cardClicked" orientation="HORIZONTAL" prefHeight="180.0" prefWidth="1200.0" />
             <TextArea fx:id="cardTotalField" editable="false" layoutX="133.0" layoutY="473.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" />
+            <ListView fx:id="opponentCardList" disable="true" layoutX="40.0" layoutY="14.0" onMouseClicked="#cardClicked" orientation="HORIZONTAL" prefHeight="180.0" prefWidth="1200.0" />
+            <TextArea fx:id="opponentCardTotal" editable="false" layoutX="40.0" layoutY="205.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" />
          </children>
       </Pane>
    </center>
