@@ -1,58 +1,19 @@
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Card {
 
-	public enum Color {
-		Green,
-		Blue,
-		Red,
-		Yellow,
-		Wild;
+	private CardColor color;
+	private CardType type;
 
-		private static Color[] colors = Color.values();
-		public static Color getColor(int i) {
-			return Color.colors[i];		
-		}
-	}
-
-	public enum Type {
-		Zero,
-		One,
-		Two,
-		Three,
-		Four,
-		Five,
-		Six,
-		Seven,
-		Eight,
-		Nine,
-		Skip,
-		Reverse,
-		DrawTwo,
-		Wild,
-		WildDrawFour;
-
-		private static Type[] types = Type.values();
-		public static Type getType(int i) {
-			return Type.types[i];
-		}
-	}
-
-	private Color color;
-	private Type type;
-	public Card(Color color, Type type) {
+	public Card(CardColor color, CardType type) {
 		this.color = color;
 		this.type = type;
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public String getImage(Color color, Type type) {
-		if (color == Color.Blue) {
+	public String getImage(CardColor color, CardType type) {
+		if (color == CardColor.Blue) {
 			switch(type) {
 			case Zero: return "/images/Blue_Zero.png";
 			case One: return "/images/Blue_One.png";
@@ -70,7 +31,7 @@ public class Card {
 			default: return null;
 			}
 		}
-		else if (color == Color.Green) {
+		else if (color == CardColor.Green) {
 			switch(type) {
 			case Zero: return "/images/Green_Zero.png";
 			case One: return "/images/Green_One.png";
@@ -88,7 +49,7 @@ public class Card {
 			default: return null;
 			}
 		}
-		else if (color == Color.Red) {
+		else if (color == CardColor.Red) {
 			switch(type) {
 			case Zero: return "/images/Red_Zero.png";
 			case One: return "/images/Red_One.png";
@@ -106,7 +67,7 @@ public class Card {
 			default: return null;
 			}
 		}
-		else if (color == Color.Yellow) {
+		else if (color == CardColor.Yellow) {
 			switch(type) {
 			case Zero: return "/images/Yellow_Zero.png";
 			case One: return "/images/Yellow_One.png";
@@ -124,7 +85,7 @@ public class Card {
 			default: return null;
 			}
 		}
-		else if (color == Color.Wild) {
+		else if (color == CardColor.Wild) {
 			switch(type) {
 			case Wild: return "/images/Wild_Wild.png";
 			case WildDrawFour: return "/images/Wild_WildDrawFour.png";
@@ -134,13 +95,12 @@ public class Card {
 		else return null;
 	}
 	
-	
-	public void setColor(Color color) {
-		this.color = color;
+	public CardColor getCardColor() {
+		return color;
 	}
-
-	public void setType(Type type) {
-		this.type = type;
+	
+	public CardType getCardType() {
+		return type;
 	}
 
 	public void setImage(String image) {

@@ -1,70 +1,53 @@
-import java.awt.Font;
 import java.util.ArrayList;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.util.List;
 
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.util.Collections;
 
 public class Game {
-	private String player;
-	private ArrayList<Card> playerCards;
-	private ArrayList<Card> discardPile;
 	private Deck deck;
-	private Card[] cards;
-	private Card.Color checkColor;
-	private Card.Type checkType;
+	private List<Player> players = new ArrayList<Player>();
+	private List<Card> playerCards = new ArrayList<Card>();
+	private List<Card> discardPile = new ArrayList<Card>();
+	private boolean gameDirection;
+	private CardColor checkColor;
+	private CardType checkType;
 	private Image lastDiscard;
-	boolean gameDirection;
-	int startingHandSize = 7;
-	int maxHandSize = 9;
+	int turn = 0;
 
 	public Game() {
-		deck = new Deck(108);
-		discardPile = new ArrayList<Card>();
+		for (int i = 0; i < 3; i ++) {
+			players.add(new Player("Player " + i));
+		}
 		gameDirection = false;
-		playerCards = new ArrayList<Card>();
+		deck = new Deck();
+		deck.shuffleDeck();
+		dealCards();
 	}
 
-	public void startGame(Game game, int playerCount) {
-		deck.createDeck();
-		deck.shuffleDeck();
-		Card card = deck.drawCard();
-		checkColor = card.getColor();
-		checkType = card.getType();
-		dealCards(playerCount);
-		Card discardCard = deck.drawCard();
-		while (discardCard.getType() == Card.Type.Wild || discardCard.getType() == Card.Type.WildDrawFour || discardCard.getType() == Card.Type.DrawTwo) {
+	public void dealCards() {
+		for (Player players : players) {
+			List<Card> hand = new ArrayList<Card>();
+			for (int i = 0; i < 7; i++) {
+				hand.add(deck.getDeck().remove(0));
+			}
+			playerCards = hand;
+			players.setPlayerHand(hand);
+		}
+		Card discardCard = deck.getDeck().remove(0);
+		checkColor = discardCard.getCardColor();
+		checkType = discardCard.getCardType();
+		while (discardCard.getCardType() == CardType.Wild || discardCard.getCardType() == CardType.WildDrawFour || discardCard.getCardType() == CardType.DrawTwo) {
 			this.addToDiscardPile(discardCard);
-			discardCard = deck.drawCard();
+			discardCard = deck.getDeck().remove(0);
 		}
 		this.addToDiscardPile(discardCard);
 	}
-	
-//	private void DiscardCard(Card card) {
-//		if (discardPile.size() == 0) {
-//			if (card.getType() == Card.Type.Wild || card.getType() == Card.Type.WildDrawFour || card.getType() == Card.Type.DrawTwo) {
-//				DiscardCard()
-//			}
-//		}
-//		discardPile.add(card);
-//		lastDiscard = new Image(card.getImage(card.getColor(), card.getType()));
-//	}
 
-	public ArrayList<Card> getPlayerHand() {
-		return playerCards;
-	}
-
-	public Card getPlayerCard(int hand) {
-		return playerCards.get(hand);
-	}
-	
 	public Image getLastDiscard() {
 		return lastDiscard;
-	}
-	
-	public int getMaxHandSize() {
-		return maxHandSize;
 	}
 
 	public Card getTopCard() {
@@ -75,110 +58,131 @@ public class Game {
 		return new ImageView(checkColor + "_" + checkType + ".png");
 	}
 
-	public String getCurrentPlayer() {
-		return player;
+	public Player getCurrentPlayer() {
+		return players.get(0);
 	}
-	
-	public ArrayList<Card> getDiscardPile() {
+
+	public List<Card> getDiscardPile() {
 		return discardPile;
 	}
 
 	public boolean isGameOver() {
-		if (hasEmptyHand()) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean hasEmptyHand() {
-		if (playerCards.size() == 0) {
+		Player thisPlayer = getActingPlayer(0);
+		if (thisPlayer.getPlayerHand().size() == 0) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean checkCard(Card card) {
-		return card.getColor() == checkColor | card.getType() == checkType;
+		return card.getCardColor() == checkColor | card.getCardType() == checkType;
 	}
 
-	public void setCardColor(Card.Color color) {
+	public void setCardColor(CardColor color) {
 		checkColor = color; 
 	}
-	
-	public void givePlayerCard() {
-		Card c = deck.drawCard();
-		getPlayerHand().add(c);
+
+	public void givePlayerCard(Player player) {
+		Card card = deck.getDeck().remove(0);
+		player.getPlayerHand().add(card);
 	}
 
-//	public void cardPlayed(Card card, Card.Color color) {
-//		if (!checkCard(card)) {
-//			if (card.getColor() == Card.Color.Wild) {
-//				checkColor = card.getColor();
-//				checkType = card.getType();
-//			}
-//			if (card.getColor() != checkColor) {
-//				throw new IllegalArgumentException("Color chosen does not match the current color: " + checkColor);
-//			}
-//		}
-//		playerCards.remove(card);
-//
-//		if (hasEmptyHand() == true) {
-//			JLabel msg = new JLabel("You won the game!");
-//			msg.setFont(new Font("Arial", Font.BOLD, 48));
-//			JOptionPane.showMessageDialog(null, msg);
-//			System.exit(0);
-//		}
-//		checkColor = card.getColor();
-//		checkType = card.getType();
-//		discardPile.add(card);
-//	}
-	
 	public void addToDiscardPile(Card card) {
 		getDiscardPile().add(card);
-		lastDiscard = new Image(card.getImage(card.getColor(), card.getType()));
-//		// debug statements
-//		System.out.println("Added to discard pile");
-//		System.out.println(getDiscardPile().get(getDiscardPile().size()-1));
+		lastDiscard = new Image(card.getImage(card.getCardColor(), card.getCardType()));
 	}
 
-	// 
-	public void playCard(int cardNumber) {
+	public Player getActingPlayer(int playerIndex) {
+		return players.get(playerIndex);
+	}
+	
+	public Deck getDeck() {
+		return deck;
+	}
+
+	public void playCard(int playerNum, int cardNumber) {
+		Player currentPlayer = getActingPlayer(playerNum);
+		Card currentCard = currentPlayer.getPlayerCard(cardNumber);
+		Card discardCard = getDiscardPile().get(getDiscardPile().size() - 1);
 		try {
-			Card currentPlayerCard = getPlayerCard(cardNumber);
-			Card discardCard = getDiscardPile().get(getDiscardPile().size()-1);
-			
-			if (currentPlayerCard.getType() == discardCard.getType()
-					|| currentPlayerCard.getColor() == discardCard.getColor()
-					|| currentPlayerCard.getType() == Card.Type.Wild
-					|| currentPlayerCard.getType() == Card.Type.WildDrawFour
-					|| discardCard.getType() == Card.Type.Wild	// temporary until wild color choosing
-					|| discardCard.getType() == Card.Type.WildDrawFour) {
-				
-				getPlayerHand().remove(cardNumber); 
-				addToDiscardPile(currentPlayerCard);
-			}
-			
+			if (currentCard.getCardType() == discardCard.getCardType()
+					|| currentCard.getCardColor() == discardCard.getCardColor()
+					|| currentCard.getCardType() == CardType.Wild
+					|| currentCard.getCardType() == CardType.WildDrawFour
+					|| discardCard.getCardType() == CardType.Wild	// TODO: temporary until wild color choosing
+					|| discardCard.getCardType() == CardType.WildDrawFour) {
 
+				Player player = getActingPlayer(playerNum);
+				player.getPlayerHand().remove(cardNumber);
+				addToDiscardPile(currentCard);
+				cardAction(playerNum, currentCard);
+			}
 		} catch (Exception e) {
-			System.out.println("We caught exception: " + e.toString());
+			System.out.println("We caught an exception: " + e.toString());
 		}
 	}
+	
+	public int nextPlayer(int turn) {
+		if (!gameDirection && turn < players.size()-1)
+			return turn+1;
+		else if (!gameDirection)
+			return 0;
+		else if (gameDirection && turn > 0)
+			return turn-1;
+		else return players.size()-1;
+	}
+	
 
-//	public void setPlayerName() {
-//		String currentPlayer = getCurrentPlayer();
-//		player1Label.setText(currentPlayer + "'s cards");
+	public void cardAction(int playerNum, Card card) {
+		if (card.getCardType() == CardType.DrawTwo) {
+			givePlayerCard(players.get(nextPlayer(playerNum)));
+			givePlayerCard(players.get(nextPlayer(playerNum)));
+		}
+		else if (card.getCardType() == CardType.Reverse && players.size() > 2) {
+			gameDirection = true;
+		}
+		else if (card.getCardType() == CardType.Skip || card.getCardType() == CardType.Reverse && players.size() <= 2) {
+			setTurn(nextPlayer(playerNum));
+		}
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+//	public void playComputerCard (int cardNum) {
+//		Card currentPlayerCard = getPlayerCard(cardNum);
+//		for(int i = 0; i < getPlayerHand().size(); i++){
+//			if (isPlayable(currentPlayerCard)){
+//				getPlayerHand().remove(cardNum); 
+//			}
+//		}
+//		Card newCard = deck.getDeck().remove(0);
+//		while (!isPlayable(newCard)) {
+//			newCard = deck.getDeck().remove(0);
+//			if (isPlayable(newCard)) {
+//				getPlayerHand().remove(newCard);
+//				getGame(game).getDiscardPile().add(newCard);
+//			} else { 
+//				getPlayerHand().add(newCard);
+//			}
+//		}
 //	}
-
-	public void dealCards(int players) {
-		for (int i = 0; i < startingHandSize; i++) {
-			for (int j = 0; j < players ; j++) {
-				Card c1 = deck.drawCard();
-				getPlayerHand().add(c1);
-			}
-		}
-	}
-
-
-
-
+//	
+//	public boolean isPlayable (Card currentPlayerCard) {
+//		Card discardCard = getDiscardPile().get(getDiscardPile().size()-1);
+//		if (currentPlayerCard.getCardType() == discardCard.getCardType()
+//				|| currentPlayerCard.getCardColor() == discardCard.getCardColor()
+//				|| currentPlayerCard.getCardType() == CardType.Wild
+//				|| currentPlayerCard.getCardType() == CardType.WildDrawFour
+//				|| discardCard.getCardType() == CardType.Wild	// temporary until wild color choosing
+//				|| discardCard.getCardType() == CardType.WildDrawFour) {
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
 }
