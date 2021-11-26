@@ -5,11 +5,32 @@ Document changes from initial design to final
 Progress of implementations
  
 Talk about major challenges and how we overcame them
- 
-Feature: filesaving option
- 
-Dumb AI, chooses valid card not best card, for simpler AI
- 
-Give a time limit for playing cards/time limit to press the call UNO button
 
-Use slideable list instead of fixed boxes for player hand
+Necessities:
+- Wild card functionality - Matthew
+- Make the discard pile the new deck if the deck is empty - Matthew
+- Implement gimmick actions for cards (special actions for 0 and 7 cards/stacking draw two/draw four cards) - Caleb
+- Implement up to 4 player functionality - Caleb
+
+Luxuries:
+- Main menu - Dom
+- Give a time limit for playing cards/time limit to press the call UNO button (having them draw a card if they do not press the button before their turn ends - Dom
+
+Bugs/Issues:
+1. Computer plays a random card regardless of the color chosen after a Wild card is played.
+
+2. Method nextPlayer() potentially unneeded, already have a global variable for tracking the players' turns.
+
+3. Merge wild card logic in to the cardAction() method then call it from the playCard() method if the card is an action card.
+
+
+
+
+
+
+
+
+
+
+
+

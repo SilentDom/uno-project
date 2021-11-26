@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.media.AudioClip;
 
 public class UnoController {
 
@@ -31,6 +32,9 @@ public class UnoController {
     @FXML
     private Label player1Label;
 
+    AudioClip playCardSound = new AudioClip(getClass().getResource("/images/playcard.wav").toExternalForm());
+    AudioClip drawCardSound = new AudioClip(getClass().getResource("/images/draw.wav").toExternalForm());
+
     // Instantiates the Game class and passes the UnoController class in for turn updates:
     Game game = new Game(this);
 
@@ -42,6 +46,7 @@ public class UnoController {
         try {
             if (!thisPlayer.getCardPlayed()) {
                 if (game.playCard(0, playerCard)) {
+                    playCardSound.play();
                     game.endTurn();
                 }
             }
@@ -55,6 +60,7 @@ public class UnoController {
     void drawCardButtonPressed(ActionEvent event) {
         try {
             game.givePlayerCard(game.getActingPlayer(0)); // TODO: fix hardcode
+            drawCardSound.play();
             drawPlayerHand();
         } catch (Exception e) {
             System.out.println("We caught an exception in drawCardButtonPressed(): " + e.toString());

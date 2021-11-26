@@ -36,9 +36,7 @@ public class Deck {
 	}
 
 	// Shuffles the deck by utilizing the Collections Java utility:
-	public void shuffleDeck() {
-		Collections.shuffle(cards);
-	}
+	public void shuffleDeck() { Collections.shuffle(cards); }
 	
 	public List<Card> getDeck() {
 		return cards;
