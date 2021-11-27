@@ -9,11 +9,10 @@ Talk about major challenges and how we overcame them
 Necessities:
 - Wild card functionality - Matthew
 - Make the discard pile the new deck if the deck is empty - Matthew
-- Implement gimmick actions for cards (special actions for 0 and 7 cards/stacking draw two/draw four cards) - Caleb
+- Implement gimmick actions for cards (special actions for 0 and 7 cards) - Caleb
 - Implement up to 4 player functionality - Caleb
 
 Luxuries:
-- Main menu - Dom
 - Give a time limit for playing cards/time limit to press the call UNO button (having them draw a card if they do not press the button before their turn ends - Dom
 
 Bugs/Issues:
