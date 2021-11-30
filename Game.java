@@ -195,23 +195,23 @@ public class Game {
 			}
 			
 
-				players.get(nextPlayer(playerNum)).getPlayerHand().addAll(draws);
-				draws.removeAll(draws);
-
-			for(int i = 0; i < players.get(nextPlayer(playerNum)).getPlayerHand().size(); i++) {
-				if (players.get(nextPlayer(playerNum)).getPlayerHand().get(i).getCardType() == CardType.DrawTwo
-			) {
-					cardAction(nextPlayer(playerNum), card);
-					}else {
-						continue;
-					}
-				}
+//				players.get(nextPlayer(playerNum)).getPlayerHand().addAll(draws);
+//				draws.removeAll(draws);
+//
+//			for(int i = 0; i < players.get(nextPlayer(playerNum)).getPlayerHand().size(); i++) {
+//				if (players.get(nextPlayer(playerNum)).getPlayerHand().get(i).getCardType() == CardType.DrawTwo
+//			) {
+//					cardAction(nextPlayer(playerNum), card);
+//					}else {
+//						continue;
+//					}
+//				}
 			
 			players.get(nextPlayer(playerNum)).getPlayerHand().addAll(draws);
 
 			
 		}
-		 if (card.getCardType() == CardType.Reverse && players.size() > 2) {
+		else if (card.getCardType() == CardType.Reverse && players.size() > 2) {
 			if(gameDirection) {
 				gameDirection = false;
 			}else if (!gameDirection) {
@@ -220,7 +220,34 @@ public class Game {
 		}
 		else if (card.getCardType() == CardType.Skip || card.getCardType() == CardType.Reverse && players.size() <= 2) {
 			setPlayerTurn(nextPlayer(playerNum));
+		}else if (card.getCardType() ==CardType.Zero) {
+			List<Card> temp = players.get(0).getPlayerHand();
+			players.get(0).getPlayerHand().clear();
+			players.get(0).getPlayerHand().addAll(players.get(playerCount-1).getPlayerHand());
+			players.get(playerCount - 1).getPlayerHand().clear();
+			for(int i = playerCount - 1; i >= 2; i--) {
+				players.get(i).getPlayerHand().addAll(players.get(i-1).getPlayerHand());
+				players.get(i-1).getPlayerHand().clear();
+			}
+
+			players.get(1).getPlayerHand().addAll(temp);
 		}
+//		else if (card.getCardType() == CardType.Seven) {
+//
+//			List<Card> temp = players.get(playerNum).getPlayerHand();
+//			int min = nextPlayer(playerNum);
+//			for (int i = 0; i < playerCount - 1; i++) {
+//				if(players.get(i + 1).getPlayerHand().size() >
+//						players.get(i).getPlayerHand().size() && i != playerNum) {
+//					min = i;
+//				}
+//			}
+//			players.get(playerNum).getPlayerHand().clear();
+//			players.get(playerNum).getPlayerHand().addAll(players.get(min).getPlayerHand());
+//			players.get(min).getPlayerHand().clear();
+//			players.get(min).getPlayerHand().addAll(temp);
+//		}
+		 
 	}
     
     public boolean checkD2(int playerNum) {
