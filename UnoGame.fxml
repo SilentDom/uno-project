@@ -4,20 +4,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UnoController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('/images/table.PNG'); -fx-background-size: 100%;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UnoController">
    <center>
-      <Pane style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <Pane style="-fx-background-image: url('/images/table.PNG'); -fx-background-size: 100%;" BorderPane.alignment="CENTER">
          <children>
+            <ImageView fitHeight="720.0" fitWidth="1280.0">
+               <image>
+                  <Image url="@images/table.PNG" />
+               </image>
+            </ImageView>
             <Button fx:id="callUnoButton" layoutX="40.0" layoutY="472.0" mnemonicParsing="false" onAction="#callUnoButtonPressed" prefHeight="46.0" prefWidth="86.0" text="Call UNO" />
             <Button fx:id="drawCardButton" layoutX="414.0" layoutY="302.0" mnemonicParsing="false" onAction="#drawCardButtonPressed" prefHeight="46.0" prefWidth="86.0" text="Draw Card" />
-            <Label fx:id="player1Label" layoutX="940.0" layoutY="468.0" prefHeight="50.0" prefWidth="300.0" text="Player 1's Cards" underline="true">
+            <Label fx:id="player1Label" layoutX="940.0" layoutY="468.0" prefHeight="50.0" prefWidth="300.0" text="Player 1's Cards" textFill="WHITE" underline="true">
                <font>
                   <Font size="36.0" />
                </font>
@@ -28,9 +32,11 @@
                </image>
             </ImageView>
             <ImageView fx:id="playedCardImage" fitHeight="150.0" fitWidth="200.0" layoutX="626.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" />
-            <ListView fx:id="cardListView" layoutX="40.0" layoutY="521.0" onMouseClicked="#cardClicked" prefHeight="180.0" prefWidth="1200.0" />
+            <ListView fx:id="cardListView" layoutX="40.0" layoutY="521.0" onMouseClicked="#cardClicked" orientation="HORIZONTAL" prefHeight="180.0" prefWidth="1200.0" stylesheets="@stylesheets.css" />
             <TextArea fx:id="cardTotalField" editable="false" layoutX="133.0" layoutY="473.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" />
-            <TextField fx:id="playerTextField" editable="false" layoutX="966.0" layoutY="430.0" />
+            <ListView fx:id="opponentCardList" layoutX="40.0" layoutY="14.0" onMouseClicked="#cardClicked" orientation="HORIZONTAL" prefHeight="190.0" prefWidth="1200.0" stylesheets="@stylesheets.css" />
+            <TextArea fx:id="opponentCardTotal" editable="false" layoutX="40.0" layoutY="205.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="45.0" prefWidth="100.0" />
+            <TextArea fx:id="opponent2Hand" layoutX="949.0" layoutY="225.0" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </Pane>
    </center>

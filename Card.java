@@ -1,17 +1,16 @@
-import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Card {
 
 	private CardColor color;
 	private CardType type;
 
+	// Controller for the Card class, accepts a Card color and type:
 	public Card(CardColor color, CardType type) {
 		this.color = color;
 		this.type = type;
 	}
 
+	// Method for getting the image of the card:
 	public String getImage(CardColor color, CardType type) {
 		if (color == CardColor.Blue) {
 			switch(type) {
@@ -94,16 +93,15 @@ public class Card {
 		}
 		else return null;
 	}
-	
+
+	// Gets the color of the card:
 	public CardColor getCardColor() {
 		return color;
 	}
-	
+
+	// Gets the type of the card (Zero, Draw Two, Reverse, etc.):
 	public CardType getCardType() {
 		return type;
-	}
-
-	public void setImage(String image) {
 	}
 
 	@Override

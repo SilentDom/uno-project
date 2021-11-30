@@ -17,11 +17,7 @@ public enum CardType {
 
 	private int typeValue;
 
-	private CardType(int typeValue) {
+	CardType(int typeValue) {
 		this.typeValue = typeValue;
-	}
-
-	public int getTypeValue() {
-		return typeValue;
 	}
 }
