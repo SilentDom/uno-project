@@ -5,7 +5,6 @@ public class User extends Player{
 
 	public User(String playerName) {
 		super(playerName);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Card userCard(int userCard) {
@@ -31,10 +30,4 @@ public class User extends Player{
 			return null;
 		}
 	}
-
-	public Card playCard(int playCard) {
-		return userCard(playCard);
-	}
-
-
 }

@@ -53,14 +53,15 @@ public class Game {
         return lastDiscard;
     }
 
-    // Gets the current player based on whose turn it is:
-    public Player getCurrentPlayer(Player player) {
-        return player.getPlayers().get(players.indexOf(player)); // TODO: fix whatever this is
-    }
-
     // Gets the discard pile:
     public List<Card> getDiscardPile() {
         return discardPile;
+    }
+
+    // In case the deck runs out of cards, this method changes the discard pile to the new deck.
+    public void replaceDeck(List<Card> cards) {
+        deck.getDeck().addAll(cards);
+        deck.shuffleDeck();
     }
 
     // Checks if the game is over by checking if any of the players have zero cards left in their hand.
@@ -75,8 +76,12 @@ public class Game {
 
     // Method for giving a specific player a card:
     public void givePlayerCard(Player player) {
-        Card card = deck.getDeck().remove(0);
-        player.givePlayerCard(card);
+        if (deck.getDeck().size() > 0) {
+            Card card = deck.getDeck().remove(0);
+            player.givePlayerCard(card);
+        } else {
+            replaceDeck(getDiscardPile());
+        }
     }
 
     // Adds whatever card was played to the discard pile, updating the image to match
@@ -88,7 +93,7 @@ public class Game {
 
     // Gets the current acting player based on their turn "number":
     public Player getActingPlayer(int playerIndex) {
-        return players.get(playerIndex); // TODO: replace this with getCurrentPlayer()
+        return players.get(playerIndex);
     }
 
     // Boolean method for playing a card, it takes in the player, and the card chosen and tries
@@ -115,7 +120,7 @@ public class Game {
                 }
             }
         } catch (Exception e) {
-            System.out.println("We caught an exception: " + e.toString());
+            System.out.println("We caught an exception in playCard(): " + e.toString());
         }
         return false;
     }

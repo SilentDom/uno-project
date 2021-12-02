@@ -41,12 +41,4 @@ public class Deck {
 	public List<Card> getDeck() {
 		return cards;
 	}
-
-	// Checks if the deck is empty: 
-	public boolean isDeckEmpty() {
-		if (cards.size() == 0) {
-			return true;
-		}
-		return false;
-	}
 }

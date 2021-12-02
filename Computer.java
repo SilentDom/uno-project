@@ -27,23 +27,6 @@ public class Computer extends Player {
 		}
 	}
 
-	//	public Card computerCard (int cardNum) {
-	//		Card currentPlayerCard = getPlayerCard(cardNum);
-	//		Card discardCard = getGame(game).getDiscardPile().get(getGame(game).getDiscardPile().size()-1);
-	//		for(int i = 0; i < getPlayerHand().size(); i++){
-	//			if (isPlayable(currentPlayerCard)){
-	//				getPlayerHand().remove(cardNum); 
-	//				return currentPlayerCard;
-	//			}
-	//		}
-	//		Card newCard;
-	//		do {
-	//			newCard = deck.getDeck().remove(0);
-	//			if(isPlayable(newCard)) return newCard;
-	//			else getPlayerHand().add(newCard);
-	//		} while(isPlayable(newCard)==false);
-	//	}
-
 	public boolean isPlayable (Card currentPlayerCard) {
 		Card discardCard = getGame(game).getDiscardPile().get(getGame(game).getDiscardPile().size()-1);
 		if (currentPlayerCard.getCardType() == discardCard.getCardType()
