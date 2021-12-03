@@ -4,12 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import javax.swing.*;
-import java.io.IOException;
 
 public class MainMenuController {
 
@@ -33,6 +28,7 @@ public class MainMenuController {
             stage.show();
         } catch (Exception e) {
             System.out.println("Exception caught in starting the game from the main menu: " + e.toString());
+            e.printStackTrace();
         }
     }
 

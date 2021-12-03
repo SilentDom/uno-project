@@ -11,4 +11,8 @@ public enum CardColor {
     CardColor(int colorValue) {
         this.colorValue = colorValue;
     }
+
+    public int getCardColorValue() {
+        return this.colorValue;
+    }
 }

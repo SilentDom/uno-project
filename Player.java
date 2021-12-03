@@ -6,10 +6,16 @@ public class Player {
     private List<Card> playerHand;
     private boolean isComputer = false;
     private boolean cardPlayed = false;
+    private int playerNum;
 
     // Constructor for the player(s):
     public Player(String playerName) {
         this.playerName = playerName;
+    }
+
+    public Player (String playerName, int playerNum) {
+        this.playerName = playerName;
+        this.playerNum = playerNum;
     }
 
     public Game getGame(Game game) {

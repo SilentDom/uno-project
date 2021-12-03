@@ -12,6 +12,7 @@ public class Game {
     private boolean gameDirection;
     private Image lastDiscard;
     private int playerTurn = 0;
+    private int playerCount = 4;
 
     // Constructor for the Game, accepts the UnoController as a variable for turn
     // checking within the controller class itself.
@@ -19,10 +20,12 @@ public class Game {
     // creates a new deck and shuffles it, and deals 7 cards to each player:
     public Game(UnoController controller) {
         this.unoController = controller;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < playerCount; i++) {
             players.add(new Player("Player " + i));
         }
         players.get(1).setComputerBool(true);
+        players.get(3).setComputerBool(true);
+        players.get(2).setComputerBool(false);
         deck = new Deck();
         deck.shuffleDeck();
         dealCards();
@@ -48,6 +51,16 @@ public class Game {
         this.addToDiscardPile(discardCard);
     }
 
+    // Getter for the game direction:
+    public boolean getGameDirection() {
+        return gameDirection;
+    }
+
+    // Setter for the game direction:
+    public void setGameDirection(boolean direction) {
+        this.gameDirection = direction;
+    }
+
     // Gets the image of the last card that was played:
     public Image getLastCardPlayed() {
         return lastDiscard;
@@ -67,7 +80,7 @@ public class Game {
     // Checks if the game is over by checking if any of the players have zero cards left in their hand.
     // Returns a boolean value:
     public boolean isGameOver() {
-        Player thisPlayer = getActingPlayer(playerTurn);
+        Player thisPlayer = getActingPlayer(getPlayerTurn());
         if (thisPlayer.getPlayerHand().size() == 0) {
             return true;
         }
@@ -102,22 +115,39 @@ public class Game {
     // The purpose of this being a boolean method is to allow the computer to tell when they can play
     // a card:
     public boolean playCard(int playerNum, int cardNumber) {
-        Player currentPlayer = getActingPlayer(playerNum);
+        Player currentPlayer = getActingPlayer(getPlayerTurn());
         Card currentCard = currentPlayer.getPlayerCard(cardNumber);
         try {
             if (isPlayable(currentCard)) {
                 // Choose wild card color
                 if (currentCard.getCardType() == CardType.Wild || currentCard.getCardType() == CardType.WildDrawFour) {
                     currentPlayer.getPlayerHand().remove(cardNumber);
-                    addToDiscardPile(currentCard);
-                    WildColor.display();
-                    return true;
+                    if (playerNum == 0 || playerNum == 2) {
+                        CardColor choice = WildColor.display();
+                        Card wildColor = new Card(choice, currentCard.getCardType());
+                        currentCard = wildColor;
+                    } else {
+                        // Chooses the first non-wild color if the computer plays a wild card:
+                        for (Card card : currentPlayer.getPlayerHand()) {
+                            if (card.getCardColor() != CardColor.Wild) {
+                                CardColor playerChoice = card.getCardColor();
+                                currentCard.setWildColor(playerChoice);
+                                System.out.println("Color chosen was: " + currentCard.getCardColor());
+                                break;
+                            }
+                        }
+                    }
+                    // Makes a player draw 4 if a wild draw 4 is played:
+                    if (currentCard.getCardType() == CardType.WildDrawFour) {
+                        cardAction(playerNum, currentCard);
+                    }
                 } else {
-                    cardAction(playerNum, currentCard);
                     currentPlayer.getPlayerHand().remove(cardNumber);
-                    addToDiscardPile(currentCard);
-                    return true;
+                    System.out.println(currentCard);
+                    cardAction(playerNum, currentCard);
                 }
+                addToDiscardPile(currentCard);
+                return true;
             }
         } catch (Exception e) {
             System.out.println("We caught an exception in playCard(): " + e.toString());
@@ -129,11 +159,11 @@ public class Game {
     // beyond what card can be played based on Uno's rules.
     // It loops through the computer's hand and plays the first playable card it finds:
     public void playComputerCard() {
-        Player thisPlayer = getActingPlayer(1);
+        Player thisPlayer = getActingPlayer(getPlayerTurn());
         boolean isCardPlayed = false;
         int pos = 0;
         for (Card card : thisPlayer.getPlayerHand()) {
-            isCardPlayed = playCard(1, pos);
+            isCardPlayed = playCard(getPlayerTurn(), pos);
             if (isCardPlayed) {
                 break;
             } else {
@@ -143,7 +173,7 @@ public class Game {
         }
         while (!isCardPlayed) {
             givePlayerCard(thisPlayer);
-            isCardPlayed = playCard(1, thisPlayer.getPlayerHand().size() - 1);
+            isCardPlayed = playCard(getPlayerTurn(), thisPlayer.getPlayerHand().size() - 1);
         }
         endTurn();
     }
@@ -154,10 +184,16 @@ public class Game {
             // Set the last player to true
             players.get(playerTurn).setCardPlayed(true);
             unoController.endTurnUpdates();
-            playerTurn++;
+            if (gameDirection) {
+                playerTurn++;
+            } else {
+                playerTurn--;
+            }
             // Set the next player to false (hasn't played a card yet)
             if (playerTurn >= players.size()) {
                 playerTurn = 0;
+            } else if (playerTurn < 0) {
+                playerTurn = players.size() - 1;
             }
             players.get(playerTurn).setCardPlayed(false);
             if (players.get(playerTurn).getComputerBool()) {
@@ -185,9 +221,7 @@ public class Game {
             || currentPlayerCard.getCardColor() == discardCard.getCardColor()
             || currentPlayerCard.getCardType() == CardType.Wild
             || currentPlayerCard.getCardType() == CardType.WildDrawFour
-            || discardCard.getCardType() == CardType.Wild    // temporary until wild color choosing
-            || discardCard.getCardType() == CardType.WildDrawFour
-            ) {
+        ) {
             return true;
         } else {
             return false;
@@ -195,13 +229,13 @@ public class Game {
     }
 
     public int nextPlayer(int turn) {
-        if (!gameDirection && turn < players.size()-1)
-            return turn+1;
-        else if (!gameDirection)
+        if (gameDirection && turn < players.size() - 1)
+            return turn + 1;
+        else if (gameDirection)
             return 0;
-        else if (gameDirection && turn > 0)
-            return turn-1;
-        else return players.size()-1;
+        else if (!gameDirection && turn > 0)
+            return turn - 1;
+        else return players.size() - 1;
     }
 
     public void cardAction(int playerNum, Card card) {
@@ -209,11 +243,44 @@ public class Game {
             givePlayerCard(players.get(nextPlayer(playerNum)));
             givePlayerCard(players.get(nextPlayer(playerNum)));
         }
-        else if (card.getCardType() == CardType.Reverse && players.size() > 2) {
-            gameDirection = true;
-        }
-        else if (card.getCardType() == CardType.Skip || card.getCardType() == CardType.Reverse && players.size() <= 2) {
+        if (card.getCardType() == CardType.WildDrawFour) {
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+        } else if (card.getCardType() == CardType.Reverse && players.size() > 2) {
+            if (gameDirection) {
+                gameDirection = false;
+            } else {
+                gameDirection = true;
+            }
+        } else if (card.getCardType() == CardType.Skip || card.getCardType() == CardType.Reverse && players.size() <= 2) {
             setPlayerTurn(nextPlayer(playerNum));
+        } else if (card.getCardType() == CardType.Zero) {
+            ArrayList<Card> temp = new ArrayList<Card>();
+            temp.addAll(players.get(0).getPlayerHand());
+            players.get(0).getPlayerHand().clear();
+            players.get(0).getPlayerHand().addAll(players.get(playerCount - 1).getPlayerHand());
+            players.get(playerCount - 1).getPlayerHand().clear();
+            for (int i = playerCount - 1; i >= 2; i--) {
+                players.get(i).getPlayerHand().addAll(players.get(i - 1).getPlayerHand());
+                players.get(i - 1).getPlayerHand().clear();
+            }
+            players.get(1).getPlayerHand().addAll(temp);
+        } else if (card.getCardType() == CardType.Seven) {
+            ArrayList<Card> temp = new ArrayList<Card>();
+            temp.addAll(players.get(playerNum).getPlayerHand());
+            int min = nextPlayer(nextPlayer(playerNum));
+            for (int i = 0; i < playerCount - 1; i++) {
+                if (players.get(i + 1).getPlayerHand().size() >
+                    players.get(i).getPlayerHand().size() && i != playerNum) {
+                    min = i;
+                }
+            }
+            players.get(playerNum).getPlayerHand().clear();
+            players.get(playerNum).getPlayerHand().addAll(players.get(min).getPlayerHand());
+            players.get(min).getPlayerHand().clear();
+            players.get(min).getPlayerHand().addAll(temp);
         }
     }
 }
