@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainMenuController">
+   <children>
+      <ImageView fitHeight="480.0" fitWidth="640.0">
+         <image>
+            <Image url="@images/table.PNG" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="200.0" fitWidth="300.0" layoutX="170.0" layoutY="8.0">
+         <image>
+            <Image url="@images/uno_logo.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="startGameButton" layoutX="170.0" layoutY="214.0" mnemonicParsing="false" onAction="#startGameButtonPressed" prefHeight="75.0" prefWidth="300.0" text="Start Game">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font>
+      </Button>
+      <Button fx:id="rulesButton" layoutX="170.0" layoutY="298.0" mnemonicParsing="false" onAction="#rulesButtonPressed" prefHeight="75.0" prefWidth="300.0" text="Rules">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font>
+      </Button>
+      <Button fx:id="exitButton" layoutX="170.0" layoutY="383.0" mnemonicParsing="false" onAction="#exitButtonPressed" prefHeight="75.0" prefWidth="300.0" text="Exit">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

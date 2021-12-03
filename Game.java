@@ -1,184 +1,219 @@
-import java.awt.Font;
 import java.util.ArrayList;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Game {
-	private String player;
-	private ArrayList<Card> playerCards;
-	private ArrayList<Card> discardPile;
-	private Deck deck;
-	private Card[] cards;
-	private Card.Color checkColor;
-	private Card.Type checkType;
-	private Image lastDiscard;
-	boolean gameDirection;
-	int startingHandSize = 7;
-	int maxHandSize = 9;
+    private Deck deck;
+    private UnoController unoController;
+    private List<Player> players = new ArrayList<Player>();
+    private List<Card> discardPile = new ArrayList<Card>();
+    private boolean gameDirection;
+    private Image lastDiscard;
+    private int playerTurn = 0;
 
-	public Game() {
-		deck = new Deck(108);
-		discardPile = new ArrayList<Card>();
-		gameDirection = false;
-		playerCards = new ArrayList<Card>();
-	}
+    // Constructor for the Game, accepts the UnoController as a variable for turn
+    // checking within the controller class itself.
+    // Instantiates 2 players (a user and a computer), sets the game direction,
+    // creates a new deck and shuffles it, and deals 7 cards to each player:
+    public Game(UnoController controller) {
+        this.unoController = controller;
+        for (int i = 0; i < 2; i++) {
+            players.add(new Player("Player " + i));
+        }
+        players.get(1).setComputerBool(true);
+        deck = new Deck();
+        deck.shuffleDeck();
+        dealCards();
+    }
 
-	public void startGame(Game game, int playerCount) {
-		deck.createDeck();
-		deck.shuffleDeck();
-		Card card = deck.drawCard();
-		checkColor = card.getColor();
-		checkType = card.getType();
-		dealCards(playerCount);
-		Card discardCard = deck.drawCard();
-		while (discardCard.getType() == Card.Type.Wild || discardCard.getType() == Card.Type.WildDrawFour || discardCard.getType() == Card.Type.DrawTwo) {
-			this.addToDiscardPile(discardCard);
-			discardCard = deck.drawCard();
-		}
-		this.addToDiscardPile(discardCard);
-	}
-	
-//	private void DiscardCard(Card card) {
-//		if (discardPile.size() == 0) {
-//			if (card.getType() == Card.Type.Wild || card.getType() == Card.Type.WildDrawFour || card.getType() == Card.Type.DrawTwo) {
-//				DiscardCard()
-//			}
-//		}
-//		discardPile.add(card);
-//		lastDiscard = new Image(card.getImage(card.getColor(), card.getType()));
-//	}
+    // Deals 7 cards to each of the players in the game and adds one card to the discard
+    // pile to start the game. It performs checks on this card to make sure it is not a wild
+    // card or a DrawTwo card and if it is, it re-draws from the deck until it finds one that
+    // does not match that criteria:
+    public void dealCards() {
+        for (Player players : players) {
+            List<Card> hand = new ArrayList<Card>();
+            for (int i = 0; i < 7; i++) {
+                hand.add(deck.getDeck().remove(0));
+            }
+            players.setPlayerHand(hand);
+        }
+        Card discardCard = deck.getDeck().remove(0);
+        while (discardCard.getCardType() == CardType.Wild || discardCard.getCardType() == CardType.WildDrawFour || discardCard.getCardType() == CardType.DrawTwo) {
+            this.addToDiscardPile(discardCard);
+            discardCard = deck.getDeck().remove(0);
+        }
+        this.addToDiscardPile(discardCard);
+    }
 
-	public ArrayList<Card> getPlayerHand() {
-		return playerCards;
-	}
+    // Gets the image of the last card that was played:
+    public Image getLastCardPlayed() {
+        return lastDiscard;
+    }
 
-	public Card getPlayerCard(int hand) {
-		return playerCards.get(hand);
-	}
-	
-	public Image getLastDiscard() {
-		return lastDiscard;
-	}
-	
-	public int getMaxHandSize() {
-		return maxHandSize;
-	}
+    // Gets the discard pile:
+    public List<Card> getDiscardPile() {
+        return discardPile;
+    }
 
-	public Card getTopCard() {
-		return new Card(checkColor, checkType);
-	}
+    // In case the deck runs out of cards, this method changes the discard pile to the new deck.
+    public void replaceDeck(List<Card> cards) {
+        deck.getDeck().addAll(cards);
+        deck.shuffleDeck();
+    }
 
-	public ImageView getTopCardImage() {
-		return new ImageView(checkColor + "_" + checkType + ".png");
-	}
+    // Checks if the game is over by checking if any of the players have zero cards left in their hand.
+    // Returns a boolean value:
+    public boolean isGameOver() {
+        Player thisPlayer = getActingPlayer(playerTurn);
+        if (thisPlayer.getPlayerHand().size() == 0) {
+            return true;
+        }
+        return false;
+    }
 
-	public String getCurrentPlayer() {
-		return player;
-	}
-	
-	public ArrayList<Card> getDiscardPile() {
-		return discardPile;
-	}
+    // Method for giving a specific player a card:
+    public void givePlayerCard(Player player) {
+        if (deck.getDeck().size() > 0) {
+            Card card = deck.getDeck().remove(0);
+            player.givePlayerCard(card);
+        } else {
+            replaceDeck(getDiscardPile());
+        }
+    }
 
-	public boolean isGameOver() {
-		if (hasEmptyHand()) {
-			return true;
-		}
-		return false;
-	}
+    // Adds whatever card was played to the discard pile, updating the image to match
+    // the card that was played:
+    public void addToDiscardPile(Card card) {
+        getDiscardPile().add(card);
+        lastDiscard = new Image(card.getImage(card.getCardColor(), card.getCardType()));
+    }
 
-	public boolean hasEmptyHand() {
-		if (playerCards.size() == 0) {
-			return true;
-		}
-		return false;
-	}
+    // Gets the current acting player based on their turn "number":
+    public Player getActingPlayer(int playerIndex) {
+        return players.get(playerIndex);
+    }
 
-	public boolean checkCard(Card card) {
-		return card.getColor() == checkColor | card.getType() == checkType;
-	}
+    // Boolean method for playing a card, it takes in the player, and the card chosen and tries
+    // to play the card, if it can the card is played and added to the discard pile. If the card is
+    // not playable the method returns false and the card is not played.
+    // The purpose of this being a boolean method is to allow the computer to tell when they can play
+    // a card:
+    public boolean playCard(int playerNum, int cardNumber) {
+        Player currentPlayer = getActingPlayer(playerNum);
+        Card currentCard = currentPlayer.getPlayerCard(cardNumber);
+        try {
+            if (isPlayable(currentCard)) {
+                // Choose wild card color
+                if (currentCard.getCardType() == CardType.Wild || currentCard.getCardType() == CardType.WildDrawFour) {
+                    currentPlayer.getPlayerHand().remove(cardNumber);
+                    addToDiscardPile(currentCard);
+                    WildColor.display();
+                    return true;
+                } else {
+                    cardAction(playerNum, currentCard);
+                    currentPlayer.getPlayerHand().remove(cardNumber);
+                    addToDiscardPile(currentCard);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("We caught an exception in playCard(): " + e.toString());
+        }
+        return false;
+    }
 
-	public void setCardColor(Card.Color color) {
-		checkColor = color; 
-	}
-	
-	public void givePlayerCard() {
-		Card c = deck.drawCard();
-		getPlayerHand().add(c);
-	}
+    // Takes the computer "player" and plays a card from their hand, it does not have any logic checking
+    // beyond what card can be played based on Uno's rules.
+    // It loops through the computer's hand and plays the first playable card it finds:
+    public void playComputerCard() {
+        Player thisPlayer = getActingPlayer(1);
+        boolean isCardPlayed = false;
+        int pos = 0;
+        for (Card card : thisPlayer.getPlayerHand()) {
+            isCardPlayed = playCard(1, pos);
+            if (isCardPlayed) {
+                break;
+            } else {
+                pos++;
+                continue;
+            }
+        }
+        while (!isCardPlayed) {
+            givePlayerCard(thisPlayer);
+            isCardPlayed = playCard(1, thisPlayer.getPlayerHand().size() - 1);
+        }
+        endTurn();
+    }
 
-//	public void cardPlayed(Card card, Card.Color color) {
-//		if (!checkCard(card)) {
-//			if (card.getColor() == Card.Color.Wild) {
-//				checkColor = card.getColor();
-//				checkType = card.getType();
-//			}
-//			if (card.getColor() != checkColor) {
-//				throw new IllegalArgumentException("Color chosen does not match the current color: " + checkColor);
-//			}
-//		}
-//		playerCards.remove(card);
-//
-//		if (hasEmptyHand() == true) {
-//			JLabel msg = new JLabel("You won the game!");
-//			msg.setFont(new Font("Arial", Font.BOLD, 48));
-//			JOptionPane.showMessageDialog(null, msg);
-//			System.exit(0);
-//		}
-//		checkColor = card.getColor();
-//		checkType = card.getType();
-//		discardPile.add(card);
-//	}
-	
-	public void addToDiscardPile(Card card) {
-		getDiscardPile().add(card);
-		lastDiscard = new Image(card.getImage(card.getColor(), card.getType()));
-//		// debug statements
-//		System.out.println("Added to discard pile");
-//		System.out.println(getDiscardPile().get(getDiscardPile().size()-1));
-	}
+    // Turn tracking method, using the player's index in the players ArrayList:
+    public void endTurn() {
+        try {
+            // Set the last player to true
+            players.get(playerTurn).setCardPlayed(true);
+            unoController.endTurnUpdates();
+            playerTurn++;
+            // Set the next player to false (hasn't played a card yet)
+            if (playerTurn >= players.size()) {
+                playerTurn = 0;
+            }
+            players.get(playerTurn).setCardPlayed(false);
+            if (players.get(playerTurn).getComputerBool()) {
+                playComputerCard();
+            }
+        } catch (Exception e) {
+            System.out.println("Caught an exception in endTurn(): " + e.toString());
+        }
+    }
 
-	// 
-	public void playCard(int cardNumber) {
-		try {
-			Card currentPlayerCard = getPlayerCard(cardNumber);
-			Card discardCard = getDiscardPile().get(getDiscardPile().size()-1);
-			
-			if (currentPlayerCard.getType() == discardCard.getType()
-					|| currentPlayerCard.getColor() == discardCard.getColor()
-					|| currentPlayerCard.getType() == Card.Type.Wild
-					|| currentPlayerCard.getType() == Card.Type.WildDrawFour
-					|| discardCard.getType() == Card.Type.Wild	// temporary until wild color choosing
-					|| discardCard.getType() == Card.Type.WildDrawFour) {
-				
-				getPlayerHand().remove(cardNumber); 
-				addToDiscardPile(currentPlayerCard);
-			}
-			
+    // Gets whose turn it is:
+    public int getPlayerTurn() {
+        return playerTurn;
+    }
 
-		} catch (Exception e) {
-			System.out.println("We caught exception: " + e.toString());
-		}
-	}
+    public void setPlayerTurn(int playerTurn) {
+        this.playerTurn = playerTurn;
+    }
 
-//	public void setPlayerName() {
-//		String currentPlayer = getCurrentPlayer();
-//		player1Label.setText(currentPlayer + "'s cards");
-//	}
+    // Checks if the card played is playable based on Uno's default rules:
+    // (Card color or type must match for the card to be played excluding wilds)
+    public boolean isPlayable(Card currentPlayerCard) {
+        Card discardCard = getDiscardPile().get(getDiscardPile().size() - 1);
+        if (currentPlayerCard.getCardType() == discardCard.getCardType()
+            || currentPlayerCard.getCardColor() == discardCard.getCardColor()
+            || currentPlayerCard.getCardType() == CardType.Wild
+            || currentPlayerCard.getCardType() == CardType.WildDrawFour
+            || discardCard.getCardType() == CardType.Wild    // temporary until wild color choosing
+            || discardCard.getCardType() == CardType.WildDrawFour
+            ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	public void dealCards(int players) {
-		for (int i = 0; i < startingHandSize; i++) {
-			for (int j = 0; j < players ; j++) {
-				Card c1 = deck.drawCard();
-				getPlayerHand().add(c1);
-			}
-		}
-	}
+    public int nextPlayer(int turn) {
+        if (!gameDirection && turn < players.size()-1)
+            return turn+1;
+        else if (!gameDirection)
+            return 0;
+        else if (gameDirection && turn > 0)
+            return turn-1;
+        else return players.size()-1;
+    }
 
-
-
-
+    public void cardAction(int playerNum, Card card) {
+        if (card.getCardType() == CardType.DrawTwo) {
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+            givePlayerCard(players.get(nextPlayer(playerNum)));
+        }
+        else if (card.getCardType() == CardType.Reverse && players.size() > 2) {
+            gameDirection = true;
+        }
+        else if (card.getCardType() == CardType.Skip || card.getCardType() == CardType.Reverse && players.size() <= 2) {
+            setPlayerTurn(nextPlayer(playerNum));
+        }
+    }
 }
