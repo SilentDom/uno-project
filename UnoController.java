@@ -100,7 +100,7 @@ public class UnoController {
             Alert unoCalled = new Alert(AlertType.INFORMATION);
             unoCalled.setTitle("UNO");
             unoCalled.setHeaderText("UNO has been called!");
-            unoCalled.setContentText(thisPlayer.getPlayerName() + " has called UNO!");
+            unoCalled.setContentText("Player " + game.getPlayerTurn() + " has called UNO!");
             unoCalled.showAndWait();
         } else {
             game.givePlayerCard(game.getActingPlayer(game.getPlayerTurn()));
@@ -183,13 +183,14 @@ public class UnoController {
         opponentCardTotal.setText("Card Total: " + thisPlayer.getPlayerHand().size());
     }
     
+    // Displays the current player's turn on screen and updates the text label
     @FXML
     public void updatePlayerTurn() {
-    	int turn = game.getPlayerTurn();
-    	if (turn == 3) {
-    		turn = 2;
-    	}
-    	turnIndicator.setText("Player " + turn + "'s Turn");
+        int turn = game.getPlayerTurn();
+        if (turn == 0) {
+            turn = 1;
+        }
+        turnIndicator.setText("Player " + turn + "'s Turn");
     }
 
     // "Draws" the 1st computer's hand by setting the images in the list view to equal what

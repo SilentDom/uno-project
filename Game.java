@@ -132,7 +132,6 @@ public class Game {
                             if (card.getCardColor() != CardColor.Wild) {
                                 CardColor playerChoice = card.getCardColor();
                                 currentCard.setWildColor(playerChoice);
-                                System.out.println("Color chosen was: " + currentCard.getCardColor());
                                 break;
                             }
                         }
@@ -143,7 +142,6 @@ public class Game {
                     }
                 } else {
                     currentPlayer.getPlayerHand().remove(cardNumber);
-                    System.out.println(currentCard);
                     cardAction(playerNum, currentCard);
                 }
                 addToDiscardPile(currentCard);
@@ -183,7 +181,6 @@ public class Game {
         try {
             // Set the last player to true
             players.get(playerTurn).setCardPlayed(true);
-            unoController.endTurnUpdates();
             if (gameDirection) {
                 playerTurn++;
             } else {
@@ -195,6 +192,8 @@ public class Game {
             } else if (playerTurn < 0) {
                 playerTurn = players.size() - 1;
             }
+
+            unoController.endTurnUpdates();
             players.get(playerTurn).setCardPlayed(false);
             if (players.get(playerTurn).getComputerBool()) {
                 playComputerCard();
