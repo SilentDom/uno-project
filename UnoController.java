@@ -41,6 +41,9 @@ public class UnoController {
 
     @FXML
     private TextArea opponent2Hand;
+    
+    @FXML
+    private Label turnIndicator;
 
     AudioClip playCardSound = new AudioClip(getClass().getResource("/images/playcard.wav").toExternalForm());
     AudioClip drawCardSound = new AudioClip(getClass().getResource("/images/draw.wav").toExternalForm());
@@ -103,6 +106,7 @@ public class UnoController {
             game.givePlayerCard(game.getActingPlayer(game.getPlayerTurn()));
             drawPlayerHand();
             drawOpponentHand(2);
+            drawCardSound.play();
         }
     }
 
@@ -177,6 +181,15 @@ public class UnoController {
         }
         // Updates the opponent's total card # to show how many cards they have:
         opponentCardTotal.setText("Card Total: " + thisPlayer.getPlayerHand().size());
+    }
+    
+    @FXML
+    public void updatePlayerTurn() {
+    	int turn = game.getPlayerTurn();
+    	if (turn == 3) {
+    		turn = 2;
+    	}
+    	turnIndicator.setText("Player " + turn + "'s Turn");
     }
 
     // "Draws" the 1st computer's hand by setting the images in the list view to equal what
@@ -256,6 +269,7 @@ public class UnoController {
         compHand1.setText("Computer 1:\nCard Total: " + game.getActingPlayer(3).getPlayerHand().size());
         compHand2.setText("Computer 2:\nCard Total: " + game.getActingPlayer(1).getPlayerHand().size());
         updateDiscardDraw();
+        updatePlayerTurn();
         if (game.isGameOver()) {
             int winningPlayer = game.getPlayerTurn() + 1;
             Alert playerWon = new Alert(Alert.AlertType.INFORMATION);
